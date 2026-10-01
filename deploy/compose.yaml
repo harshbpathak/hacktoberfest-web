@@ -1,0 +1,26 @@
+# Runs on the server from ~/hacktoberfest. TAG and APP_PORT come from the .env file that
+# deploy.sh writes next to this file. Apache proxies hacktoberfest.gdg.nith.ac.in to this port.
+services:
+  web:
+    image: gdg-hacktoberfest:${TAG:?TAG is not set, run deploy/deploy.sh}
+    container_name: gdg-hacktoberfest
+    restart: unless-stopped
+    init: true
+    ports:
+      # Only reachable from the server itself; Apache is the public entry point
+      - "127.0.0.1:${APP_PORT:-3000}:3000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 256m
+    cpus: 0.5
+    pids_limit: 100
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

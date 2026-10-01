@@ -1,38 +1,63 @@
-import { motion } from "framer-motion";
+import type { CSSProperties } from "react";
 import { Medal, Sparkles, Trophy } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { HexSticker, type StickerTone } from "@/components/event/hex-sticker";
+import { cn } from "@/lib/utils";
 
 interface PrizeCardProps {
   place: string;
   title: string;
   description: string;
   icon?: "trophy" | "medal" | "sparkles";
+  /** gold = featured (filled) card; navy / red follow the reference category accents. */
+  accent?: "gold" | "navy" | "red";
 }
 
 const icons = { trophy: Trophy, medal: Medal, sparkles: Sparkles };
 
-export function PrizeCard({ place, title, description, icon = "trophy" }: PrizeCardProps) {
-  const Icon = icons[icon];
+const accents: Record<
+  NonNullable<PrizeCardProps["accent"]>,
+  { shadow: string; pill: string; sticker: StickerTone; card: string }
+> = {
+  gold: {
+    shadow: "var(--gold-deep)",
+    pill: "bg-paper text-ink",
+    sticker: "red",
+    card: "[--card-bg:var(--gold)]",
+  },
+  navy: { shadow: "var(--navy)", pill: "bg-sky-chip text-navy", sticker: "sky", card: "" },
+  red: { shadow: "var(--red-deep)", pill: "bg-pink-chip text-maroon", sticker: "coral", card: "" },
+};
 
+// Reference: activity cards (sticker + category pill + condensed title; the sticker wiggles when the
+// card is hovered) and the featured gold card from the mission timeline.
+export function PrizeCard({
+  place,
+  title,
+  description,
+  icon = "trophy",
+  accent = "red",
+}: PrizeCardProps) {
+  const a = accents[accent];
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -8 }}
-      viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration: 0.45 }}
-      className="h-full"
+    <article
+      className={cn("hf-card sticker-host flex h-full flex-col p-6 sm:p-7", a.card)}
+      style={{ "--card-shadow": a.shadow } as CSSProperties}
     >
-      <Card className="prize-card relative h-full overflow-hidden border-border/80 bg-card/70 backdrop-blur-xl">
-        <CardContent className="relative flex h-full flex-col items-center p-8 text-center">
-          <span className="mb-6 font-mono text-xs font-bold uppercase text-accent">{place}</span>
-          <div className="trophy-stage mb-7 flex size-24 items-center justify-center rounded-full">
-            <Icon className="size-12 text-highlight drop-shadow-glow" strokeWidth={1.5} />
-          </div>
-          <h3 className="font-display text-2xl font-bold text-foreground">{title}</h3>
-          <p className="mt-3 text-sm leading-6 text-muted-foreground">{description}</p>
-        </CardContent>
-      </Card>
-    </motion.div>
+      <div className="flex items-start justify-between gap-4">
+        <HexSticker icon={icons[icon]} tone={a.sticker} size={76} tilt={-3} />
+        <span className={cn("hf-pill", a.pill)}>{place}</span>
+      </div>
+      <h3 className="mt-6 font-display text-[1.75rem] font-bold leading-[1.02] tracking-[-0.02em]">
+        {title}
+      </h3>
+      <p
+        className={cn(
+          "mt-3 text-[0.95rem] leading-[1.55]",
+          accent === "gold" ? "text-ink" : "text-body",
+        )}
+      >
+        {description}
+      </p>
+    </article>
   );
 }

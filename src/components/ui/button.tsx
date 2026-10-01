@@ -4,26 +4,34 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
+// Variants mirror the hacktoberfest.com buttons: square, 2px ink border, hard offset shadow that
+// presses 2px on hover (150ms). Colours are passed to the `.hf-btn` rule in styles.css via vars.
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold cursor-pointer transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap font-mono font-[650] tracking-[0.02em] leading-[1.1] text-center no-underline cursor-pointer disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        // Coral fill, maroon shadow — the primary reference button
+        default:
+          "hf-btn [--btn-bg:var(--coral)] [--btn-fg:var(--ink)] [--btn-shadow:var(--maroon)]",
+        // Paper fill, stone on hover (reference "outline")
         outline:
-          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        glow: "bg-primary text-primary-foreground shadow-glow hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-glow-lg",
-        terminal: "border border-border bg-card/60 text-foreground backdrop-blur hover:-translate-y-0.5 hover:border-accent hover:text-accent",
+          "hf-btn [--btn-bg:var(--paper)] [--btn-fg:var(--ink)] [--btn-shadow:var(--maroon)] [--btn-hover-bg:var(--stone)]",
+        // Ghost-on-dark for forest bands (reference "on dark"): fills paper on hover
+        onDark:
+          "hf-btn [--btn-bg:transparent] [--btn-fg:var(--paper)] [--btn-border:color-mix(in_oklab,white_72%,transparent)] [--btn-shadow:var(--forest-deep)] [--btn-hover-bg:var(--paper)] [--btn-hover-fg:var(--ink)]",
+        secondary: "hf-btn [--btn-bg:var(--stone)] [--btn-fg:var(--ink)] [--btn-shadow:var(--ink)]",
+        destructive:
+          "hf-btn [--btn-bg:var(--red-deep)] [--btn-fg:var(--paper)] [--btn-shadow:var(--maroon)]",
+        ghost: "transition-colors hover:bg-stone",
+        link: "font-mono underline underline-offset-4 decoration-2 hover:decoration-[3px]",
       },
       size: {
-        default: "h-9 px-4 py-2",
-        sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-12 rounded-lg px-7 text-base",
-        icon: "h-9 w-9",
+        default: "min-h-[50px] px-[22px] py-3 text-[0.85rem]",
+        sm: "px-[17px] py-[10px] text-[0.78rem] [--btn-offset:4px] [--btn-offset-hover:2px]",
+        // MLH-sized hero CTA (64px tall) in Hacktoberfest styling
+        lg: "min-h-[64px] px-7 py-4 text-base",
+        icon: "size-10 p-0",
       },
     },
     defaultVariants: {
