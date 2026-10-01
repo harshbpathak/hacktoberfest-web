@@ -6,7 +6,7 @@ const nodes = [
   { x: 68, y: 66 }, { x: 82, y: 75 }, { x: 92, y: 60 },
 ];
 
-const edges = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [4, 8], [8, 9], [9, 10]];
+const edges: Array<[number, number]> = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [4, 8], [8, 9], [9, 10]];
 
 export function NeuralGitBackground() {
   const reducedMotion = useReducedMotion();
@@ -36,7 +36,7 @@ export function NeuralGitBackground() {
           key={`${node.x}-${node.y}`}
           className="node absolute size-2 rounded-full"
           style={{ left: `${node.x}%`, top: `${node.y}%` }}
-          animate={reducedMotion ? undefined : { scale: [1, 1.8, 1], opacity: [0.45, 1, 0.45] }}
+          animate={reducedMotion ? { scale: 1, opacity: 0.7 } : { scale: [1, 1.8, 1], opacity: [0.45, 1, 0.45] }}
           transition={{ duration: 2.8, delay: index * 0.22, repeat: Infinity }}
         />
       ))}
