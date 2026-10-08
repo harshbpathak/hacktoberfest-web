@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# One-time Apache setup for hacktoberfest.gdg.nith.ac.in. Run ON THE SERVER, as root:
+# One-time Apache setup for gdg.nith.ac.in (event site). Run ON THE SERVER, as root:
 #   sudo bash ~/hacktoberfest/server-setup.sh
 # Safe for the other sites on this Apache: it only adds one site, checks the whole config before
 # reloading, and reloads gracefully (open connections finish, nothing restarts).
 set -euo pipefail
 
-DOMAIN="hacktoberfest.gdg.nith.ac.in"
+DOMAIN="gdg.nith.ac.in"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 
 if [[ $EUID -ne 0 ]]; then

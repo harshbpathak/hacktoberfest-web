@@ -1,7 +1,7 @@
-# Deploying hacktoberfest.gdg.nith.ac.in
+# Deploying the event site (gdg.nith.ac.in)
 
 The site runs as a Docker container on the GDG server (`14.139.56.17`). The server's existing
-Apache handles HTTPS and forwards `hacktoberfest.gdg.nith.ac.in` to the container, which only
+Apache handles HTTPS and forwards `gdg.nith.ac.in` (and `hacktoberfest.gdg.nith.ac.in`, if CC adds it) to the container, which only
 listens on `127.0.0.1:3000`.
 
 ```
@@ -10,12 +10,12 @@ Visitor ── HTTPS ──▶ Apache (80/443, certificate) ──▶ 127.0.0.1:
 
 ## What the deploy touches on the server
 
-| Touches                                                                                                             | Never touches                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `~/hacktoberfest/` in the `gdg` user's home                                                                         | Other users' files                                                                               |
-| The container `gdg-hacktoberfest` (and a short-lived `gdg-hacktoberfest-trial`)                                     | Any other container, volume or network                                                           |
-| Images named `gdg-hacktoberfest:*`; old ones it deployed itself are removed, keeping the last 3                     | Any other image (no `docker system prune`)                                                       |
-| One Apache site, `hacktoberfest.gdg.nith.ac.in`, plus `/var/www/hacktoberfest-maintenance/` (one-time `sudo` setup) | Other Apache sites; Apache is checked with `configtest` and reloaded gracefully, never restarted |
+| Touches                                                                                               | Never touches                                                                                    |
+| ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `~/hacktoberfest/` in the `gdg` user's home                                                           | Other users' files                                                                               |
+| The container `gdg-hacktoberfest` (and a short-lived `gdg-hacktoberfest-trial`)                       | Any other container, volume or network                                                           |
+| Images named `gdg-hacktoberfest:*`; old ones it deployed itself are removed, keeping the last 3       | Any other image (no `docker system prune`)                                                       |
+| One Apache site, `gdg.nith.ac.in`, plus `/var/www/hacktoberfest-maintenance/` (one-time `sudo` setup) | Other Apache sites; Apache is checked with `configtest` and reloaded gracefully, never restarted |
 
 ## Safety built in
 
@@ -31,8 +31,8 @@ Visitor ── HTTPS ──▶ Apache (80/443, certificate) ──▶ 127.0.0.1:
 
 ## One-time setup
 
-1. **DNS (NITH Computer Centre).** An A record `hacktoberfest.gdg.nith.ac.in → 14.139.56.17`
-   (or a wildcard `*.gdg.nith.ac.in`). Check: `dig +short hacktoberfest.gdg.nith.ac.in`.
+1. **DNS (NITH Computer Centre).** `gdg.nith.ac.in → 14.139.56.17` is live. For the
+   `hacktoberfest.` name too, CC must add it (or `*.gdg.nith.ac.in`).
 2. **SSH key from the deploying laptop** (asks for the `gdg` password once):
    ```bash
    ssh-copy-id -i ~/.ssh/id_ed25519.pub gdg@14.139.56.17
@@ -47,10 +47,11 @@ Visitor ── HTTPS ──▶ Apache (80/443, certificate) ──▶ 127.0.0.1:
    ```
 6. **HTTPS**, once DNS resolves (on the server):
    ```bash
-   sudo certbot --apache -d hacktoberfest.gdg.nith.ac.in --redirect
+   sudo certbot --apache -d gdg.nith.ac.in --redirect
+   # once hacktoberfest.gdg.nith.ac.in resolves, re-run with both: -d gdg.nith.ac.in -d hacktoberfest.gdg.nith.ac.in
    sudo certbot renew --dry-run
    ```
-7. **Uptime monitor.** Add `https://hacktoberfest.gdg.nith.ac.in` to a free monitor such as
+7. **Uptime monitor.** Add `https://gdg.nith.ac.in` to a free monitor such as
    UptimeRobot, with email alerts to gdg@nith.ac.in.
 
 ## Everyday use

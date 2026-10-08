@@ -1,5 +1,5 @@
 # Runs on the server from ~/hacktoberfest. TAG and APP_PORT come from the .env file that
-# deploy.sh writes next to this file. Apache proxies hacktoberfest.gdg.nith.ac.in to this port.
+# deploy.sh writes next to this file. Apache proxies gdg.nith.ac.in to this port.
 services:
   web:
     image: gdg-hacktoberfest:${TAG:?TAG is not set, run deploy/deploy.sh}
