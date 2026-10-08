@@ -11,11 +11,11 @@ cd "$(dirname "$0")"
 CONTAINER="gdg-hacktoberfest"
 TRIAL="gdg-hacktoberfest-trial"
 IMAGE="gdg-hacktoberfest"
-# Port: from the environment, else the one saved by the last deploy, else 3000
+# Port: from the environment, else the one saved by the last deploy, else 3210
 saved_port() { if [[ -f .env ]]; then sed -n 's/^APP_PORT=//p' .env; fi; }
 APP_PORT="${APP_PORT:-$(saved_port)}"
-APP_PORT="${APP_PORT:-3000}"
-TRIAL_PORT="${TRIAL_PORT:-3001}"
+APP_PORT="${APP_PORT:-3210}"
+TRIAL_PORT="${TRIAL_PORT:-3211}"
 
 if docker compose version >/dev/null 2>&1; then
   dc() { docker compose -p hacktoberfest "$@"; }

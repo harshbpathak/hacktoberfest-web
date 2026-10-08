@@ -3,7 +3,7 @@
 # container to it. If the new version isn't healthy within 90s, the server restores the old one.
 #   deploy/deploy.sh                    deploys the current commit
 #   SERVER=user@host deploy/deploy.sh   different server
-#   APP_PORT=3100 deploy/deploy.sh      if port 3000 is taken on the server (remembered after)
+#   APP_PORT=3300 deploy/deploy.sh      if port 3210 is taken on the server (remembered after)
 set -euo pipefail
 
 SERVER="${SERVER:-gdg@14.139.56.17}"

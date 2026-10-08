@@ -2,10 +2,10 @@
 
 The site runs as a Docker container on the GDG server (`14.139.56.17`). The server's existing
 Apache handles HTTPS and forwards `gdg.nith.ac.in` (and `hacktoberfest.gdg.nith.ac.in`, if CC adds it) to the container, which only
-listens on `127.0.0.1:3000`.
+listens on `127.0.0.1:3210`.
 
 ```
-Visitor ── HTTPS ──▶ Apache (80/443, certificate) ──▶ 127.0.0.1:3000 ──▶ container gdg-hacktoberfest
+Visitor ── HTTPS ──▶ Apache (80/443, certificate) ──▶ 127.0.0.1:3210 ──▶ container gdg-hacktoberfest
 ```
 
 ## What the deploy touches on the server
@@ -19,7 +19,7 @@ Visitor ── HTTPS ──▶ Apache (80/443, certificate) ──▶ 127.0.0.1:
 
 ## Safety built in
 
-- **Trial run first.** Each new version starts on `127.0.0.1:3001` with production limits. The live
+- **Trial run first.** Each new version starts on `127.0.0.1:3211` with production limits. The live
   site only switches if the trial passes its health check, so a broken build never reaches visitors.
 - **Self-healing.** The container restarts after a crash or a server reboot, and Docker checks
   the home page every 30 seconds.
@@ -76,4 +76,4 @@ bash ~/hacktoberfest/remote.sh rollback   # previous version
 | Apache error for the domain          | `sudo tail -50 /var/log/apache2/gdg-error.log`                                  |
 | Deploy says "failed its trial run"   | The live site is unchanged; read the logs it printed, fix, commit, deploy again |
 | Certificate problems                 | `sudo openssl x509 -in /etc/apache2/ssl/nith.crt -noout -enddate`; ask CC       |
-| Port 3000 already used on the server | `APP_PORT=3100 deploy/deploy.sh` and change the port in the Apache site file    |
+| Port 3210 already used on the server | `APP_PORT=3300 deploy/deploy.sh` and change the port in the Apache site file    |
