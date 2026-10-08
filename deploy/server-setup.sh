@@ -13,9 +13,9 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-echo "==> Enabling Apache modules this site needs (proxy, proxy_http, headers)"
+echo "==> Enabling Apache modules this site needs (proxy, proxy_http, headers, ssl)"
 # These only take effect where a site uses them, so other sites behave exactly as before.
-a2enmod -q proxy proxy_http headers
+a2enmod -q proxy proxy_http headers ssl
 
 echo "==> Installing maintenance page"
 install -d -m 755 /var/www/hacktoberfest-maintenance
@@ -35,4 +35,4 @@ fi
 echo "==> Graceful reload"
 systemctl reload apache2
 
-echo "Done. Test from the server: curl -sI -H 'Host: $DOMAIN' http://127.0.0.1/"
+echo "Done. Test from the server: curl -skI --resolve $DOMAIN:443:127.0.0.1 https://$DOMAIN/"

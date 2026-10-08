@@ -45,12 +45,9 @@ Visitor ── HTTPS ──▶ Apache (80/443, certificate) ──▶ 127.0.0.1:
    ```bash
    sudo bash ~/hacktoberfest/server-setup.sh
    ```
-6. **HTTPS**, once DNS resolves (on the server):
-   ```bash
-   sudo certbot --apache -d gdg.nith.ac.in --redirect
-   # once hacktoberfest.gdg.nith.ac.in resolves, re-run with both: -d gdg.nith.ac.in -d hacktoberfest.gdg.nith.ac.in
-   sudo certbot renew --dry-run
-   ```
+6. **HTTPS** uses the institute's existing `*.nith.ac.in` certificate in `/etc/apache2/ssl/`
+   (shared with other NITH sites; expires 10 Dec 2026, renewed by CC). No certbot needed. It does
+   not cover `hacktoberfest.gdg.nith.ac.in`; that name only redirects to `gdg.nith.ac.in`.
 7. **Uptime monitor.** Add `https://gdg.nith.ac.in` to a free monitor such as
    UptimeRobot, with email alerts to gdg@nith.ac.in.
 
@@ -76,7 +73,7 @@ bash ~/hacktoberfest/remote.sh rollback   # previous version
 | Symptom                              | Check                                                                           |
 | ------------------------------------ | ------------------------------------------------------------------------------- |
 | Maintenance page stays up            | `bash ~/hacktoberfest/remote.sh status`, then `logs`                            |
-| Apache error for the domain          | `sudo tail -50 /var/log/apache2/hacktoberfest-error.log`                        |
+| Apache error for the domain          | `sudo tail -50 /var/log/apache2/gdg-error.log`                                  |
 | Deploy says "failed its trial run"   | The live site is unchanged; read the logs it printed, fix, commit, deploy again |
-| Certificate problems                 | `sudo certbot certificates` and `sudo certbot renew --dry-run`                  |
+| Certificate problems                 | `sudo openssl x509 -in /etc/apache2/ssl/nith.crt -noout -enddate`; ask CC       |
 | Port 3000 already used on the server | `APP_PORT=3100 deploy/deploy.sh` and change the port in the Apache site file    |
